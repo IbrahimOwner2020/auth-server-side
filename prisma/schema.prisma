@@ -2,17 +2,28 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+    provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "mongodb"
-  url      = env("DATABASE_URL")
+    provider = "mongodb"
+    url      = env("DATABASE_URL")
 }
 
 model User {
-    id        String   @id @default(cuid()) @map("_id")
-    email     String   @unique
+    id        String        @id @default(cuid()) @map("_id")
+    email     String        @unique
     name      String?
+    bio       String?
+    photoUrl  String?       @default("https://t3.ftcdn.net/jpg/03/64/62/36/360_F_364623623_ERzQYfO4HHHyawYkJ16tREsizLyvcaeg.jpg")
     password  String
+    verified  Boolean       @default(false)
+    role      RoleEnumType? @default(user)
+    createdAt DateTime      @default(now())
+    updatedAt DateTime      @updatedAt
+}
+
+enum RoleEnumType {
+    user
+    admin
 }

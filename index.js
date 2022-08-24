@@ -2,7 +2,13 @@ const express = require("express");
 const cors = require("cors");
 // const { PrismaClient } = require("@prisma/client");
 require("dotenv").config();
-const { register, login, deleteUser, allUsers } = require("./apis/auth");
+const {
+	register,
+	login,
+	deleteUser,
+	allUsers,
+	updateUser,
+} = require("./apis/auth");
 
 // const prisma = new PrismaClient();
 
@@ -17,6 +23,7 @@ app.get("/", (req, res) => {
 
 app.post("/auth/register", register);
 app.post("/auth/login", login);
+app.post("/auth/update/:id", updateUser);
 app.delete("/auth/user/:id", deleteUser);
 app.get("/auth/users", allUsers);
 

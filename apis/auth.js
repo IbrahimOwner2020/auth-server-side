@@ -8,6 +8,7 @@ const prisma = new PrismaClient();
 // Get all users
 const allUsers = async (req, res) => {
 	const users = await prisma.user.findMany();
+	users.map((user) => user.password);
 	res.send(200, users);
 };
 
@@ -91,10 +92,37 @@ const deleteUser = async (req, res) => {
 		const { id } = req.params;
 		const user = await prisma.user.delete({
 			where: {
-				id: Number(id),
+				id: id,
 			},
 		});
+
+		if (!user) {
+			res.send(404, { mesasage: "User not found" });
+		}
+
 		res.send(200, { message: `User with id ${user.id} deleted` });
+	} catch (error) {
+		res.send(500, error);
+	}
+};
+
+// UPDATE USER
+const updateUser = async (req, res) => {
+	const { id } = req.params;
+	const data = req.body;
+	try {
+		const user = await prisma.user.update({
+			where: {
+				id: id,
+			},
+			data: data,
+		});
+
+		if (!user) {
+			res.send(404, { message: "User not found" });
+		}
+
+		res.send(200, { message: `User with id ${user.id} has been updated` });
 	} catch (error) {
 		res.send(500, error);
 	}
@@ -105,4 +133,5 @@ module.exports = {
 	login,
 	deleteUser,
 	allUsers,
+	updateUser,
 };
